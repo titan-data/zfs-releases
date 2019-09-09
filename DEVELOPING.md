@@ -26,7 +26,9 @@ invoked by a user with sufficient privileges to run docker containers.
 The `build` script will iterate over the contents of the directory and invoke
 the zfs-builder container to perform the build.
 
-   ./build [-u] [-z zfs_version] [kernel_release ...]
+```
+./build [-u] [-z zfs_version] [kernel_release ...]
+```
 
 The '-u' option will only build the userland. By default, it will build both for
 the first found kernel release, and then kernel only for the remainder. The '-z'
