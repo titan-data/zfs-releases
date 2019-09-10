@@ -3,3 +3,12 @@ services:
   - docker
 script:
   - bash ./build 5.0.0-25-generic
+deploy:
+  provider: releases
+  api_key:
+    secure: qWE/KeSH0bYu20gIaXKx0jh2v9MNzzUYBCNiy23kisIyFCdVDqgBFQSGIPHU8mQaO3pcYI3XoctJbirnDEMd5RDvNMZZfHOfEkebxWpY6Eo95SS78Xds4AU0IOA1ZFxzdgGL+1pvXtnjzuTXQD9w/APjKpJhiFsiiTbp1wfeahjBEWZIrR+UBrvQLiIlAOtG8O2Lh07CUSThtSRGNaoQ7q62jOV+bNNqK0ttaSO4AOZfGPzRZ7kM6dNwVlVnUzzHiJOQfZscu/W2QZEmFkOM0dQ6O2ZUxooZcthA59pZZIiwtS+tMfWEj6Tm77XuYfVDfGCXyoFu57lupUXC+fWUI1lbiNsVs88fQrTx28fix8nQOCT/oPd9l60ksagaCwa0YwCaYcs2aRFGVHOdcihFTLp36NY4/QjfsXSeMF3ZeCBwMnvJscngtKR3hzzR3mm69sfaWNPYZyzEG4TJadX1y9OiY8jrk3uQFjfH6JO4/Np2/zk55r0trCq6eiGUhv/HCFnDxmJJGdQReHesulvdi9rcLnWxxfI7LdwqIxONw/B4K4tr9NODS/IQvNxw17+z6MW6agAA4aM6aObm/C1Hxy0svLYzRRxCs9+sZqHlPimRx9xKq8j5Ruk11cGrsGYLjYL/aM9wy7ZOHe0O8cRw3uQbp1tJauJfCyD4f3srDzs=
+  file: out/archive/*
+  file_glob: true
+  draft: true
+  on:
+    tags: true
