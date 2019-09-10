@@ -7,7 +7,7 @@ src_dir=$PWD/src
 out_dir=$PWD/out
 archive_dir=$out_dir/archive
 build_dir=$out_dir/build
-zfs_builder=delphix/zfs-builder:latest
+zfs_builder=titandata/zfs-builder:latest
 
 function usage() {
   echo "Usage: $0 [-u] [kernel_release ...]" 1>&2
