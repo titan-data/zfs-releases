@@ -7,7 +7,7 @@ branches:
     - /^untagged/
 jobs:
   include:
-    - stage: test
+    - stage: build
       script:
         - bash ./build 5.0.0-25-generic
     - stage: deploy

@@ -42,7 +42,10 @@ platforms (this can take a while).
 
 ## Release
 
-There is currently no automated build & release process for ZFS releases.
-These must be manually built and uploaded to a GitHub release tag. The tag
-must be created in a draft state prior to artifacts being uploaded, otherwise
-any titan installs risk failing due to incomplete release binaries.
+We only need to publish the notion of a "current" release. Rather than
+creating a separate public repository (e.g. S3 bucket) with its own operational
+overhead, we are instead using GitHub releases. Every push to the master branch
+will create a new release (using the default "untagged-" prefix), and publish
+all the artifacts there. The Titan installation process will always look in
+the latest release for available downloads. This is all driven by a Travis CI
+job triggered on each push.
