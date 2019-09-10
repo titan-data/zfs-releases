@@ -1,1 +1,5 @@
 language: generic
+services:
+  - docker
+script:
+  - bash ./build 5.0.0-25-generic
