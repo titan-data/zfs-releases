@@ -25,6 +25,7 @@ matrix:
     # LinuxKit variants
     - &build-kernel
       script:
+        - ls out/archive
         - bash ./build -k $KERNEL
       env: KERNEL=4.9.184-linuxkit
     - <<: *build-kernel
