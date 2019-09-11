@@ -17,12 +17,14 @@ env:
 script:
   - bash ./build $TARGET
 
-deploy:
-  provider: releases
-  api_key:
-    secure: $GITHUB_TOKEN
-  file_glob: true
-  file: out/archive/*
-  skip_cleanup: true
-  on:
-    branch: feature/travis
+matrix:
+  include:
+    - stage: deploy
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUB_TOKEN
+        file_glob: true
+        file: out/archive/*
+        on:
+          branch: feature/travis
