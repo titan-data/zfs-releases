@@ -6,11 +6,8 @@ branches:
   only:
     - feature/travis
 
-branches:
-  except:
-    - /^release-/
-
 env:
+  # Userland build
   - MODE=-u KERNEL=4.9.184-linuxkit
 
 script:
@@ -22,6 +19,7 @@ deploy:
   secret_access_key: $AWS_SECRET_KEY
   bucket: $S3_BUCKET
   upload-dir: $S3_FOLDER
+  skip_cleanup: true
   local_dir: out/archive
   on:
     branch: feature/travis
