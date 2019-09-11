@@ -1,16 +1,19 @@
 language: shell
 os: linux
 services: docker
+cache:
+  directories:
+    - out/archive
 branches:
   only:
     - feature/travis
     - /^untagged/
+env:
+  - TARGET=5.0.0-25-generic
+  - TARGET=4.9.125-linuxkit
 matrix:
   include:
     - stage: build
-      env:
-        - TARGET=5.0.0-25-generic
-        - TARGET=4.9.125-linuxkit
       script:
         - bash ./build $TARGET
     - stage: deploy
