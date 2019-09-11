@@ -30,7 +30,7 @@ function archive_exists() {
 while getopts ":ukb:z:" o; do
   case "${o}" in
     b)
-      artifact_url=$OPTARG
+      archive_url=$OPTARG
       ;;
     u)
       userland_only=true
