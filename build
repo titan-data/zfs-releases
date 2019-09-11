@@ -7,6 +7,7 @@ src_dir=$PWD/src
 out_dir=$PWD/out
 archive_dir=$out_dir/archive
 build_dir=$out_dir/build
+force=false
 zfs_builder=titandata/zfs-builder:develop
 
 function usage() {
@@ -19,10 +20,13 @@ function die() {
   exit 1
 }
 
-while getopts ":uz:" o; do
+while getopts ":ufz:" o; do
   case "${o}" in
     u)
       userland_only=true
+      ;;
+    f)
+      force=true
       ;;
     z)
       zfs_versions=$OPTARG
@@ -55,25 +59,39 @@ for version in $zfs_versions; do
     fi
 
     mkdir -p $build_dir/$release || exit 1
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host \
-      -e ZFS_VERSION=zfs-$version -e KERNEL_RELEASE=$release \
-      -e KERNEL_UNAME="$(cat $src_dir/$release/uname)" -e ZFS_CONFIG=$zfs_config \
-      -v $src_dir/$release:/config -v $build_dir/$release:/build \
-      $zfs_builder || exit 1
+    kernel_archive=zfs-$version-$release.tar.gz
+    userland_archive=zfs-$version-userland.tar.gz
+
+    if [[ -f $archive_dir/$kernel_archive && $force = false ]]; then
+        echo "Archive $kernel_archive already exists, skipping"
+    else
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host \
+          -e ZFS_VERSION=zfs-$version -e KERNEL_RELEASE=$release \
+          -e KERNEL_UNAME="$(cat $src_dir/$release/uname)" -e ZFS_CONFIG=$zfs_config \
+          -v $src_dir/$release:/config -v $build_dir/$release:/build \
+          $zfs_builder || exit 1
+    fi
 
     cd $build_dir/$release
+
     if [[ $zfs_config != kernel ]]; then
-      echo "Creating userland archive zfs-$version-userland.tar.gz"
-      tar -czf $archive_dir/zfs-$version-userland.tar.gz \
-        --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
-        --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
+        if [[ -f $archive_dir/$userland_archive && $force = false ]]; then
+            echo "Archive $userland_archive already exists, skipping"
+        else
+            echo "Creating userland archive $userland_archive"
+            tar -czf $archive_dir/$userland_archive \
+              --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
+              --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
+        fi
     fi
 
     first=false
     [[ $userland_only = true ]] && break
 
-    echo "Creating kernel archive zfs-$version-$release.tar.gz"
-    tar -czf $archive_dir/zfs-$version-$release.tar.gz lib/modules || exit 1
+    if [[ ! -f $archive_dir/$kernel_archive ]]; then
+        echo "Creating kernel archive $kernel_archive"
+        tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
+    fi
   done
 done
 exit 0
