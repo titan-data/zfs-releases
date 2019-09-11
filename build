@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 zfs_versions=0.8.1
 userland_only=false
 kernel_only=false

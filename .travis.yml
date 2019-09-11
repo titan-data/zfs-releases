@@ -19,6 +19,7 @@ matrix:
     # Userland
     - stage: build
       script:
+        - ls out/archive
         - bash ./build -u
 
     # LinuxKit variants
