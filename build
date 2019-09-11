@@ -67,21 +67,21 @@ for version in $zfs_versions; do
     if [[ $userland_only = true ]]; then
       zfs_config=user
       if archive_exists $userland_archive; then
-          echo "Archive $userland_archive exists, skipping"
-          continue
+        echo "Archive $userland_archive exists, skipping"
+        continue
       fi
     elif [[ $first = true && $kernel_only = false ]]; then
       zfs_config=all
       if archive_exists $kernel_archive &&
-        archive_exists $userland_archive; then
-          echo "Archive $kernel_archive and $userland_archive exists, skipping"
-          continue
+          archive_exists $userland_archive; then
+        echo "Archive $kernel_archive and $userland_archive exists, skipping"
+        continue
       fi
     else
       zfs_config=kernel
       if archive_exists $kernel_archive; then
-          echo "Archive $kernel_archive exists, skipping"
-          continue
+        echo "Archive $kernel_archive exists, skipping"
+        continue
       fi
     fi
 
@@ -101,8 +101,8 @@ for version in $zfs_versions; do
     fi
 
     if [[ $zfs_config != user ]]; then
-        echo "Creating kernel archive $kernel_archive"
-        tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
+      echo "Creating kernel archive $kernel_archive"
+      tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
     fi
 
     first=false

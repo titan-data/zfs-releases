@@ -4,7 +4,7 @@ services: docker
 
 branches:
   only:
-    - feature/travis
+    - master
 
 env:
   # Userland build
@@ -30,3 +30,5 @@ deploy:
   upload-dir: $S3_FOLDER
   skip_cleanup: true
   local_dir: out/archive
+  on:
+    branch: master
