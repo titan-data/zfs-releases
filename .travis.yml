@@ -30,5 +30,3 @@ deploy:
   upload-dir: $S3_FOLDER
   skip_cleanup: true
   local_dir: out/archive
-  on:
-    branch: feature/travis
