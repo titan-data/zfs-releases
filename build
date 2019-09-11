@@ -24,7 +24,7 @@ function die() {
 }
 
 function archive_exists() {
-  [[ -n $archive_url ]] && curl -output /dev/null --fail --silent --head $archive_url/$1
+  [[ -n $archive_url ]] && curl --output /dev/null --fail --silent --head $archive_url/$1
 }
 
 while getopts ":ukb:z:" o; do
