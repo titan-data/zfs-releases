@@ -34,6 +34,9 @@ The '-u' option will only build the userland. By default, it will build both for
 the first found kernel release, and then kernel only for the remainder. The '-z'
 option will specify the ZFS version(s) to build.
 
+When you add a new version, you will have to update the environment
+variables in .travis.yml to parallelize the builds.
+
 ## Testing
 
 You should be able to run the builds for any platforms that you are changing.
