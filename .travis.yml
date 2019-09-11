@@ -15,17 +15,14 @@ env:
   - TARGET=5.0.0-25-generic
   - TARGET=4.9.125-linuxkit
 script:
-  - ls out/archive
-#  - bash ./build $TARGET
+  - bash ./build $TARGET
 
-matrix:
-  include:
-    - stage: deploy
-      deploy:
-        provider: releases
-        api_key:
-          secure: $GITHUB_TOKEN
-        file_glob: true
-        file: out/archive/*
-        on:
-          branch: feature/travis
+deploy:
+  provider: releases
+  api_key:
+    secure: $GITHUB_TOKEN
+  file_glob: true
+  file: out/archive/*
+  skip_cleanup: true
+  on:
+    branch: feature/travis
