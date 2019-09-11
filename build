@@ -2,6 +2,7 @@
 
 zfs_versions=0.8.1
 userland_only=false
+kernel_only=false
 kernel_releases=
 src_dir=$PWD/src
 out_dir=$PWD/out
@@ -20,10 +21,13 @@ function die() {
   exit 1
 }
 
-while getopts ":ufz:" o; do
+while getopts ":ukfz:" o; do
   case "${o}" in
     u)
       userland_only=true
+      ;;
+    k)
+      kernel_only=true
       ;;
     f)
       force=true
@@ -50,48 +54,53 @@ for version in $zfs_versions; do
     [[ -d $src_dir/$release ]] || die "Unknown kernel release $release"
     [[ -f $src_dir/$release/uname ]] || die "Missing uname file for $release"
 
-    if [[ $userland_only = true ]]; then
-      zfs_config=user
-    elif [[ $first = true ]]; then
-      zfs_config=all
-    else
-      zfs_config=kernel
-    fi
-
     mkdir -p $build_dir/$release || exit 1
     kernel_archive=zfs-$version-$release.tar.gz
     userland_archive=zfs-$version-userland.tar.gz
 
-    if [[ -f $archive_dir/$kernel_archive && $force = false ]]; then
-        echo "Archive $kernel_archive already exists, skipping"
+    if [[ $userland_only = true ]]; then
+      zfs_config=user
+      if [[ -f $archive_dir/$userland_archive && $force = false ]]; then
+          echo "Archive $userland_archive exists, skipping"
+          continue
+      fi
+    elif [[ $first = true && $kernel_only = false ]]; then
+      zfs_config=all
+      if [[ -f $archive_dir/$kernel_archive && $force = false ]]; then
+          echo "Archive $kernel_archive exists, skipping"
+          continue
+      fi
     else
-        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host \
-          -e ZFS_VERSION=zfs-$version -e KERNEL_RELEASE=$release \
-          -e KERNEL_UNAME="$(cat $src_dir/$release/uname)" -e ZFS_CONFIG=$zfs_config \
-          -v $src_dir/$release:/config -v $build_dir/$release:/build \
-          $zfs_builder || exit 1
+      zfs_config=kernel
+      if [[ -f $archive_dir/$kernel_archive &&
+            -f $arhicve_dir/$userland_archive && $force = false ]]; then
+          echo "Archive $kernel_archive and $userland_archive exists, skipping"
+          continue
+      fi
     fi
+
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host \
+      -e ZFS_VERSION=zfs-$version -e KERNEL_RELEASE=$release \
+      -e KERNEL_UNAME="$(cat $src_dir/$release/uname)" -e ZFS_CONFIG=$zfs_config \
+      -v $src_dir/$release:/config -v $build_dir/$release:/build \
+      $zfs_builder || exit 1
 
     cd $build_dir/$release
 
     if [[ $zfs_config != kernel ]]; then
-        if [[ -f $archive_dir/$userland_archive && $force = false ]]; then
-            echo "Archive $userland_archive already exists, skipping"
-        else
-            echo "Creating userland archive $userland_archive"
-            tar -czf $archive_dir/$userland_archive \
-              --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
-              --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
-        fi
+        echo "Creating userland archive $userland_archive"
+        tar -czf $archive_dir/$userland_archive \
+          --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
+          --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
+    fi
+
+    if [[ $zfs_config != user ]]; then
+        echo "Creating kernel archive $kernel_archive"
+        tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
     fi
 
     first=false
     [[ $userland_only = true ]] && break
-
-    if [[ ! -f $archive_dir/$kernel_archive ]]; then
-        echo "Creating kernel archive $kernel_archive"
-        tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
-    fi
   done
 done
 exit 0

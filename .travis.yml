@@ -14,31 +14,45 @@ cache:
   directories:
     - out/archive
 
-env:
-  # Ubuntu variants
-  - TARGET=5.0.0-25-generic
-  - TARGET=4.15.0-1034-gcp
-  - TARGET=4.15.0-1044-aws
-  # LinuxKit variants
-  - TARGET=4.9.125-linuxkit
-  - TARGET=4.9.184-linuxkit
-  # CentOS variants
-  - TARGET=3.10.0-957.1.3.el7.x86_64
-script:
-  - ls out/archive
-  - bash ./build $TARGET
+build_kernel: &build_kernel
+  script:
+    - bash ./build -k $KERNEL
 
-before_deploy:
-  - git config --local user.name "Eric Schrock"
-  - git config --local user.email "Eric.Schrock@delphix.com"
-  - export TRAVIS_TAG=${TRAVIS_TAG:-release-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  - git tag $TRAVIS_TAG
+matrix:
+  include:
+    # Userland
+    - stage: build
+      script:
+        - bash ./build -u
+    # LinuxKit variants
+    - <<: *build_kernel
+      env: KERNEL: 4.9.184-linuxkit
+    - <<: *build_kernel
+      env: KERNEL: 4.9.125-linuxkit
+    # Ubuntu variants
+    - <<: *build_kernel
+      env: KERNEL: 5.0.0-25-generic
+    - <<: *build_kernel
+      env: KERNEL: 4.15.0-1034-gcp
+    - <<: *build_kernel
+      env: KERNEL: 4.15.0-1044-aws
+    # CentOS variants
+    - <<: *build_kernel
+      env: KERNEL: 3.10.0-957.1.3.el7.x86_64
 
-deploy:
-  provider: releases
-  api_key:
-    secure: $GITHUB_TOKEN
-  file_glob: true
-  file: out/archive/*
-  on:
-    branch: feature/travis
+    # Deploy stage
+    - stage: deploy
+      before_deploy:
+        - ls out/archive
+        - git config --local user.name "Eric Schrock"
+        - git config --local user.email "Eric.Schrock@delphix.com"
+        - export TRAVIS_TAG=${TRAVIS_TAG:-release-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+        - git tag $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUB_TOKEN
+        file_glob: true
+        file: out/archive/*
+        on:
+          branch: feature/travis
