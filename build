@@ -68,14 +68,14 @@ for version in $zfs_versions; do
       fi
     elif [[ $first = true && $kernel_only = false ]]; then
       zfs_config=all
-      if [[ -f $archive_dir/$kernel_archive && $force = false ]]; then
+      if [[ -f $archive_dir/$kernel_archive &&
+            -f $archive_dir/$userland_archive && $force = false ]]; then
           echo "Archive $kernel_archive exists, skipping"
           continue
       fi
     else
       zfs_config=kernel
-      if [[ -f $archive_dir/$kernel_archive &&
-            -f $arhicve_dir/$userland_archive && $force = false ]]; then
+      if [[ -f $archive_dir/$kernel_archive && $force = false ]]; then
           echo "Archive $kernel_archive and $userland_archive exists, skipping"
           continue
       fi
