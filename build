@@ -74,13 +74,13 @@ for version in $zfs_versions; do
       zfs_config=all
       if archive_exists $kernel_archive &&
         archive_exists $userland_archive; then
-          echo "Archive $kernel_archive exists, skipping"
+          echo "Archive $kernel_archive and $userland_archive exists, skipping"
           continue
       fi
     else
       zfs_config=kernel
       if archive_exists $kernel_archive; then
-          echo "Archive $kernel_archive and $userland_archive exists, skipping"
+          echo "Archive $kernel_archive exists, skipping"
           continue
       fi
     fi
