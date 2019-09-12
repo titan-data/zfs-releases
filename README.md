@@ -1,6 +1,9 @@
 # Titan ZFS builds
 
 [![Build Status](https://travis-ci.org/titan-data/zfs-releases.svg?branch=master)](https://travis-ci.org/titan-data/zfs-releases)
+![GitHub last commit](https://img.shields.io/github/last-commit/titan-data/zfs-releases)
+![GitHub issues](https://img.shields.io/github/issues/titan-data/zfs-releases)
+![GitHub](https://img.shields.io/github/license/titan-data/zfs-releases)
 
 This repository uses the [zfs-builder](https://github.com/titan-data/zfs-builder)
 image to build a set of well-known Linux ZFS binaries, for kernel and userland,
