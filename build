@@ -10,7 +10,7 @@ src_dir=$PWD/src
 out_dir=$PWD/out
 archive_dir=$out_dir/archive
 build_dir=$out_dir/build
-zfs_builder=titandata/zfs-builder:develop
+zfs_builder=titandata/zfs-builder:latest
 archive_url=
 
 function usage() {
