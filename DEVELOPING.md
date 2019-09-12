@@ -27,12 +27,16 @@ The `build` script will iterate over the contents of the directory and invoke
 the zfs-builder container to perform the build.
 
 ```
-./build [-u] [-z zfs_version] [kernel_release ...]
+./build [-u] [-k] [-z zfs_version] [kernel_release ...]
 ```
 
-The '-u' option will only build the userland. By default, it will build both for
-the first found kernel release, and then kernel only for the remainder. The '-z'
-option will specify the ZFS version(s) to build.
+The '-u' option will only build userland, while '-k' will only build the kernel.
+By default, it will build both for the first found kernel release, and then
+kernel only for the remainder. The '-z' option will specify the ZFS version(s)
+to build.
+
+When you add a new version, you will have to update the environment
+variables in .travis.yml.
 
 ## Testing
 
@@ -42,7 +46,12 @@ platforms (this can take a while).
 
 ## Release
 
-There is currently no automated build & release process for ZFS releases.
-These must be manually built and uploaded to a GitHub release tag. The tag
-must be created in a draft state prior to artifacts being uploaded, otherwise
-any titan installs risk failing due to incomplete release binaries.
+We build releases on Travis, with every push triggering a new build. Once a
+particular set of binaries is built, it shouldn't ever need to be updated,
+so the Travis build will pass a URL via '-b' that can be used to check if
+a releases exists in a S3 bucket. If it does, then the build is skipped.
+Artifacts are then published to said S3 bucket.
+
+If we do need to re-build a particular release, we can remove it manually via
+the S3 console, or we could add a force flag to overwrite it if this turns out
+to be a common occurrence.
