@@ -14,6 +14,7 @@ env:
   - MODE=-k KERNEL=4.9.125-linuxkit
   # Ubuntu variants
   - MODE=-k KERNEL=5.0.0-25-generic
+  - MODE=-k KERNEL=5.0.0-1016-azure
   - MODE=-k KERNEL=4.15.0-1040-gcp
   - MODE=-k KERNEL=4.15.0-1034-gcp
   - MODE=-k KERNEL=4.15.0-1044-aws
