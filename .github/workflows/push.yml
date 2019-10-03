@@ -4,7 +4,7 @@ on: push
 
 jobs:
   build_userland:
-    name: Build Kernel
+    name: Build Userland
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-18.04
     strategy:
