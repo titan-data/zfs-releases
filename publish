@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Copyright The Titan Project Contributors.
+#
+
+set -x
+
+src_dir=$PWD/src
+out_dir=$PWD/out
+archive_dir=$out_dir/archive
+build_dir=$out_dir/build
+
+bucket=$1
+
+mkdir -p $archive_dir
+for file in $(ls -1 $archive_dir); do
+  aws s3 cp $archive_dir/$file $bucket
+done
