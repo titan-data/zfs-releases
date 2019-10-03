@@ -11,10 +11,11 @@ jobs:
       matrix:
         zfs:
           - 0.8.1
+          - 0.8.2
     steps:
       - uses: actions/checkout@v1
       - name: Build
-        run: ./build -b ${{ secrets.s3_url }} 4.9.184-linuxkit
+        run: ./build -b ${{ secrets.s3_url }} -z ${{ matrix.zfs }} 4.9.184-linuxkit
       - name: Publish
         run: ./publish ${{ secrets.s3_bucket }}
         env:
@@ -28,6 +29,7 @@ jobs:
       matrix:
         zfs:
           - 0.8.1
+          - 0.8.2
         kernel:
           # LinuxKit variants
           - 4.9.184-linuxkit
@@ -45,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build
-        run: ./build -b ${{ secrets.s3_url }} -k ${{ matrix.kernel }}
+        run: ./build -b ${{ secrets.s3_url }} -k ${{ matrix.kernel }} -z ${{ matrix.zfs }}
       - name: Publish
         run: ./publish ${{ secrets.s3_bucket }}
         env:
