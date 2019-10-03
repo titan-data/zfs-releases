@@ -14,5 +14,5 @@ bucket=$1
 
 mkdir -p $archive_dir
 for file in $(ls -1 $archive_dir); do
-  aws s3 cp $archive_dir/$file $bucket
+  aws s3 cp $archive_dir/$file $bucket/$file
 done
