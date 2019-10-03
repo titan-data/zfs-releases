@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build
-        run: ./build -b ${{ secrets.s3_url }} -k ${{ matrix.kernel }} -z ${{ matrix.zfs }}
+        run: ./build -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} ${{ matrix.kernel }}
       - name: Publish
         run: ./publish ${{ secrets.s3_bucket }}
         env:
