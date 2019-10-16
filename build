@@ -5,7 +5,7 @@
 
 set -x
 
-zfs_versions="0.8.1 0.8.2"
+zfs_versions="0.8.2"
 userland_only=false
 kernel_only=false
 kernel_releases=
