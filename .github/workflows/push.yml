@@ -35,6 +35,7 @@ jobs:
           - 4.9.125-linuxkit
           # Ubuntu variants
           - 5.0.0-25-generic
+          - 5.3.0-28-generic
           - 5.0.0-1016-azure
           - 5.0.0-1020-azure
           - 5.0.0-1022-azure
