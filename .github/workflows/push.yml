@@ -35,6 +35,7 @@ jobs:
           - 4.9.125-linuxkit
           # Ubuntu variants
           - 5.0.0-25-generic
+          - 5.3.0-28-generic
           - 5.0.0-1016-azure
           - 5.0.0-1020-azure
           - 5.0.0-1022-azure
@@ -48,7 +49,6 @@ jobs:
           - 3.10.0-957.1.3.el7.x86_64
           - 3.10.0-957.27.2.el7.x86_64
           - 3.10.0-1062.4.1.el7.x86_64
-          - 4.18.0-147.3.1.el8_1.x86_64
           # WSL variants
           - 4.19.72-microsoft-standard
     steps:
