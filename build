@@ -88,7 +88,7 @@ for version in $zfs_versions; do
       fi
     fi
 
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host --privileged --pid=host \
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --network=host \
       -e ZFS_VERSION=zfs-$version -e KERNEL_RELEASE=$release \
       -e KERNEL_UNAME="$(cat $src_dir/$release/uname)" -e ZFS_CONFIG=$zfs_config \
       -v $src_dir/$release:/config -v $build_dir/$release:/build \
