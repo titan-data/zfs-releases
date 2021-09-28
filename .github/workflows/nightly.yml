@@ -1,6 +1,9 @@
 name: Push
 
-on: push
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
 
 jobs:
   build_userland:
@@ -22,55 +25,25 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  get_kernel:
-    name: Get GitHub Actions Kernel Version
+  build_kernel:
+    name: Build Kernel
+    if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        zfs:
+          - 0.8.2
+          - 2.0.4
     steps:
-      - name: Output Kernel -r
-        run: uname -r
-      - name: Output Kernel -a
-        run: uname -a
-        
-#  build_kernel:
-#    name: Build Kernel
-#    if: startsWith(github.ref, 'refs/heads/')
-#    runs-on: ubuntu-18.04
-#    strategy:
-#      matrix:
-#        zfs:
-#          - 0.8.2
-#          - 2.0.4
-#        kernel:
-#          # LinuxKit variants
-#          #          - 4.14.131-linuxkit
-#          - 4.9.184-linuxkit
-#          - 4.9.125-linuxkit
-#          # Ubuntu variants
-#          - 5.0.0-25-generic
-#          - 5.3.0-28-generic
-#          - 5.0.0-1016-azure
-#          - 5.0.0-1020-azure
-#          - 5.0.0-1022-azure
-#          - 5.0.0-1023-azure
-#          - 5.0.0-1025-azure
-#          - 5.0.0-1027-azure
-#          - 4.15.0-1040-gcp
-#          - 4.15.0-1034-gcp
-#          - 4.15.0-1044-aws
-#          - 5.4.0-1025-azure
-#          # CentOS variants
-#          - 3.10.0-957.1.3.el7.x86_64
-#          - 3.10.0-957.27.2.el7.x86_64
-#          - 3.10.0-1062.4.1.el7.x86_64
-#          - 4.18.0-147.5.1.el8_1.x86_64
-#          # WSL variants
-#          - 4.19.72-microsoft-standard
-#    steps:
-#      - uses: actions/checkout@v1
-#      - name: Build
-#        run: ./build -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} ${{ matrix.kernel }}
-#      - name: Publish
-#        run: ./publish ${{ secrets.s3_bucket }}
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: actions/checkout@v1
+      - name: Create Kernel Build File
+        run: ./scripts/setup_kernel.sh
+      - name: Output Build File
+        run: cat src/$(uname -r)/uname
+      - name: Build
+        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE $(uname -r)
+      - name: Publish
+        run: ./publish ${{ secrets.s3_bucket }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
