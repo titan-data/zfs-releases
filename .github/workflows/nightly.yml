@@ -21,6 +21,16 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  get_kernel:
+    name: Get GitHub Actions Kernel Version
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Output Kernel -r
+        run: uname -r
+      - name: Output Kernel -a
+        run: uname -a
+        
 #  build_kernel:
 #    name: Build Kernel
 #    if: startsWith(github.ref, 'refs/heads/')
@@ -29,6 +39,7 @@ jobs:
 #      matrix:
 #        zfs:
 #          - 0.8.2
+#          - 2.0.4
 #        kernel:
 #          # LinuxKit variants
 #          #          - 4.14.131-linuxkit
