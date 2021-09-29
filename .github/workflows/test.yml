@@ -17,7 +17,20 @@ jobs:
         run: titan install
       - name: Docker PS
         run: docker ps
+        
       - name: Dump docker logs
         uses: jwalton/gh-docker-logs@v1
+        with:
+          dest: './logs'
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: logs.tgz
+          path: ./logs.tgz
+
       - name: Test Clone
         run: titan clone -n hello-world s3web://demo.titan-data.io/hello-world/postgres
