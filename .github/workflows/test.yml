@@ -15,6 +15,11 @@ jobs:
         run: cp $PWD/titan /usr/local/bin/titan
       - name: Install Titan
         run: titan install
+
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+
       - name: Docker PS
         run: docker ps
 
