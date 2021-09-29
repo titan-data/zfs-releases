@@ -15,3 +15,7 @@ jobs:
         run: cp $PWD/titan /usr/local/bin/titan
       - name: Install Titan
         run: titan install
+      - name: Test Clone
+        run: titan clone -n hello-world s3web://demo.titan-data.io/hello-world/postgres
+      - name: Docker PS
+        run: docker ps
