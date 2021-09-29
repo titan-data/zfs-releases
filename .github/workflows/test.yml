@@ -19,8 +19,5 @@ jobs:
         run: docker ps
       - name: Dump docker logs
         uses: jwalton/gh-docker-logs@v1
-        with:
-          images: 'titan-docker-launch'
-          tail: '100'
       - name: Test Clone
         run: titan clone -n hello-world s3web://demo.titan-data.io/hello-world/postgres
