@@ -1,0 +1,17 @@
+name: Test
+
+on: push
+
+jobs:
+  install_titan:
+    name: Install Titan
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Download Titan
+        run: curl -Ls https://github.com/titan-data/titan/releases/download/0.5.3/titan-cli-0.5.3-linux_amd64.tar -o titan.tar
+      - name: Unpack Titan
+        run: tar -xvf titan.tar
+      - name: Alias Titan
+        run: cp $PWD/titan /usr/local/bin/titan
+      - name: Install Titan
+        run: titan install
