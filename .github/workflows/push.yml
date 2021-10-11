@@ -53,6 +53,7 @@ jobs:
           - 4.18.0-147.5.1.el8_1.x86_64
           # WSL variants
           - 4.19.72-microsoft-standard
+          - 4.19.128-microsoft-standard
     steps:
       - uses: actions/checkout@v1
       - name: Build
