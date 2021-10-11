@@ -11,6 +11,7 @@ jobs:
       matrix:
         zfs:
           - 0.8.2
+          - 2.0.4
     steps:
       - uses: actions/checkout@v1
       - name: Build
@@ -28,6 +29,7 @@ jobs:
       matrix:
         zfs:
           - 0.8.2
+          - 2.0.4
         kernel:
           # LinuxKit variants
 #          - 4.14.131-linuxkit
