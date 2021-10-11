@@ -38,16 +38,9 @@ jobs:
           # Ubuntu variants
           - 5.0.0-25-generic
           - 5.3.0-28-generic
-          - 5.0.0-1016-azure
-          - 5.0.0-1020-azure
-          - 5.0.0-1022-azure
-          - 5.0.0-1023-azure
-          - 5.0.0-1025-azure
-          - 5.0.0-1027-azure
           - 4.15.0-1040-gcp
           - 4.15.0-1034-gcp
           - 4.15.0-1044-aws
-          - 5.4.0-1025-azure
           # CentOS variants
           - 3.10.0-957.1.3.el7.x86_64
           - 3.10.0-957.27.2.el7.x86_64
