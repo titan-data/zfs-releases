@@ -5,7 +5,7 @@
 
 set -ex
 
-release=$(uname -r)
+release=$1
 
 while getopts ":ukb:z:d:" o; do
   case "${o}" in
