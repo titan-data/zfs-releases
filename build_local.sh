@@ -21,9 +21,6 @@ while getopts ":ukb:z:d:" o; do
     k)
       kernel_only=true
       ;;
-    r)
-      release=$OPTARG
-      ;;
     z)
       zfs_versions=$OPTARG
       ;;
