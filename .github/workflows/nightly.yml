@@ -41,7 +41,7 @@ jobs:
       - name: Output Build File
         run: cat src/$(uname -r)/uname
       - name: Build
-        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE $(uname -r)
+        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE 5.4.0-1063-azure
         env:
           ZFS_VERSION: zfs-${{ matrix.zfs }}
       - name: Publish
