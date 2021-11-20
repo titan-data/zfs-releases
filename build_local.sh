@@ -5,7 +5,7 @@
 
 set -ex
 
-release=$(uname -r)
+release=$(bash get_latest_headers.sh)
 
 while getopts ":ukb:z:d:" o; do
   case "${o}" in
