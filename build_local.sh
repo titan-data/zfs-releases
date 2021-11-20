@@ -41,6 +41,7 @@ function archive_exists() {
 
 # Download Linux Headers
 function install_packages() {
+  sudo apt update -y
   sudo apt-get install -y linux-headers-$release
   sudo apt-get install -y                                                    \
     curl xz-utils                                                            \
