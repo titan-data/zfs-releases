@@ -34,6 +34,10 @@ jobs:
         zfs:
           - 0.8.2
           - 2.0.4
+        kernels:
+          - 5.4.0-1063-azure
+          - 5.4.0-1064-azure
+          - 5.4.0-1065-azure
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
@@ -41,7 +45,7 @@ jobs:
       - name: Output Build File
         run: cat src/$(uname -r)/uname
       - name: Build
-        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE $(uname -r)
+        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE -r ${{ matrix.kernels }}
         env:
           ZFS_VERSION: zfs-${{ matrix.zfs }}
       - name: Publish

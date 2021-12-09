@@ -15,3 +15,15 @@ do
 done
 out=${out#"linux-headers-"}
 echo $out
+
+#releases=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/actions/virtual-environments/releases)
+#for row in $(echo "${releases}" | jq -r '.[] | @base64'); do
+#    _jq() {
+#        echo ${row} | base64 --decode | jq -r ${1}
+#    }
+#    tag=$(_jq '.tag_name')
+#    if [[ $tag == ubuntu18/* ]] ;
+#    then
+#        echo $(_jq '.body')
+#    fi
+#done

@@ -3,12 +3,22 @@
 # Copyright The Titan Project Contributors.
 #
 
-set -ex
+set -e
 
-release=$(bash get_latest_headers.sh)
+optstring=":ukb:z:d:r:"
+function usage {
+        echo "Usage: $(basename $0) $optstring" 2>&1
+        echo '   -u   build userland only'
+        echo '   -k   build kernel only'
+        echo '   -b   URL for archive'
+        echo '   -z   zfs version'
+        echo '   -d   home directory'
+        echo '   -r   kernel release'
+        exit 1
+}
 
-while getopts ":ukb:z:d:" o; do
-  case "${o}" in
+while getopts ${optstring} arg; do
+  case "${arg}" in
     b)
       archive_url=$OPTARG
       ;;
@@ -23,6 +33,9 @@ while getopts ":ukb:z:d:" o; do
       ;;
     z)
       zfs_versions=$OPTARG
+      ;;
+    r)
+      release=$OPTARG
       ;;
     *)
       usage
@@ -42,6 +55,7 @@ function archive_exists() {
 # Download Linux Headers
 function install_packages() {
   sudo apt-get install -y linux-headers-$release
+#  potentially install headers from URL instead of APT
   sudo apt-get install -y                                                    \
     curl xz-utils                                                            \
     build-essential bc                                                       \
