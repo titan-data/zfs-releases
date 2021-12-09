@@ -37,7 +37,6 @@ jobs:
         kernels:
           - 5.4.0-1063-azure
           - 5.4.0-1064-azure
-          - 5.4.0-1065-azure
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
