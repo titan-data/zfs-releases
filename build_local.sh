@@ -54,6 +54,7 @@ function archive_exists() {
 
 # Download Linux Headers
 function install_packages() {
+  sudo apt-get update -y
   sudo apt-get install -y linux-headers-$release
 #  potentially install headers from URL instead of APT
   sudo apt-get install -y                                                    \
