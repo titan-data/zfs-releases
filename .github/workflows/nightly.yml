@@ -25,8 +25,28 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+  get_kernels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16.0'
+
+      - name: Setup GO environment
+        run: |
+          go mod download
+
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go)"
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   build_kernel:
     name: Build Kernel
+    needs: get_kernels
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-18.04
     strategy:
@@ -34,9 +54,7 @@ jobs:
         zfs:
           - 0.8.2
           - 2.0.4
-        kernels:
-          - 5.4.0-1063-azure
-          - 5.4.0-1064-azure
+        kernels: ${{ fromJson(needs.get_kernels.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
