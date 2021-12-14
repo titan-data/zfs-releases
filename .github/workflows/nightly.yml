@@ -29,17 +29,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16.0'
-
       - name: Setup GO environment
         run: |
           go mod download
-
       - id: set-matrix
         run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go)"
+        env:
+          GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
