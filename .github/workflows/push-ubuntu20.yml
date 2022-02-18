@@ -10,11 +10,11 @@ jobs:
     strategy:
       matrix:
         zfs:
-          - 0.8.2
+#          - 0.8.2
           - 2.0.4
         kernels:
           # Ubuntu variants
-          - 5.11.0-1022-aws
+#          - 5.11.0-1022-aws
           - 5.13.0-28-generic
     steps:
       - uses: actions/checkout@v1
