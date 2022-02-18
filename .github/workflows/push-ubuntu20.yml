@@ -12,14 +12,20 @@ jobs:
         zfs:
           - 0.8.2
           - 2.0.4
-        kernel:
+        kernels:
           # Ubuntu variants
           - 5.11.0-1022-aws
           - 5.13.0-28-generic
     steps:
       - uses: actions/checkout@v1
+      - name: Create Kernel Build File
+        run: ./scripts/setup_kernel.sh
+      - name: Output Build File
+        run: cat src/$(uname -r)/uname
       - name: Build
-        run: ./build -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} ${{ matrix.kernel }}
+        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE -r ${{ matrix.kernels }}
+        env:
+          ZFS_VERSION: zfs-${{ matrix.zfs }}
       - name: Publish
         run: ./publish ${{ secrets.s3_bucket }}
         env:
