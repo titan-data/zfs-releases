@@ -39,7 +39,6 @@ jobs:
           - 4.15.0-1040-gcp
           - 4.15.0-1034-gcp
           - 4.15.0-1044-aws
-          - 5.4.0-1060-aws
           # CentOS variants support for CentOS 7 and * is EOL
 #          - 3.10.0-957.1.3.el7.x86_64
 #          - 3.10.0-957.27.2.el7.x86_64

@@ -14,7 +14,8 @@ jobs:
           - 2.0.6
         kernels:
           # Ubuntu variants
-#          - 5.11.0-1022-aws
+          - 5.4.0-1060-aws
+          - 5.11.0-1022-aws
           - 5.13.0-28-generic
     steps:
       - uses: actions/checkout@v1
