@@ -54,6 +54,7 @@ jobs:
         zfs:
           - 0.8.2
           - 2.0.4
+          - 2.0.6
         kernels: ${{ fromJson(needs.get_kernels.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
