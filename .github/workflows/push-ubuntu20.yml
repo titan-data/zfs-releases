@@ -20,6 +20,7 @@ jobs:
           - 5.4.0-1071-aws
           - 5.11.0-1022-aws
           - 5.13.0-28-generic
+          - 5.15.0-1014-azure
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
