@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/google/go-github/v39/github"
 	"golang.org/x/oauth2"
@@ -24,7 +25,9 @@ func init() {
 var kernels []string
 
 func main() {
-	linuxVariant := os.Args[1]
+	var linuxVariant string
+	flag.StringVar(&linuxVariant, "l", "linuxVariant", "specify linux variant")
+	flag.Parse()
 	releases, _, err := client.Repositories.ListReleases(ctx, "actions", "virtual-environments", &github.ListOptions{PerPage: 100})
 	if err != nil {
 		return
