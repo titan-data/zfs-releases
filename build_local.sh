@@ -46,7 +46,7 @@ done
 out_dir=$home_dir/out
 archive_dir=$out_dir/archive
 build_dir=$out_dir/build
-userland_archive=zfs-$version-userland.tar.gz
+userland_archive=zfs-$zfs_versions-userland.tar.gz
 kernel_archive=zfs-$zfs_versions-$release.tar.gz
 
 function archive_exists() {
