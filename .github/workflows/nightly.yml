@@ -84,7 +84,7 @@ jobs:
 
   build_kernel:
     name: Build Kernel
-    needs: get_kernels
+    needs: [get_kernels_ubuntu-18,get_kernels_ubuntu-20,get_kernels_ubuntu-22]
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ${{ matrix.os }}
     strategy:
