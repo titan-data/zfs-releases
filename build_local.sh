@@ -46,6 +46,7 @@ done
 out_dir=$home_dir/out
 archive_dir=$out_dir/archive
 build_dir=$out_dir/build
+userland_archive=zfs-$version-userland.tar.gz
 kernel_archive=zfs-$zfs_versions-$release.tar.gz
 
 function archive_exists() {
@@ -89,14 +90,35 @@ function build_zfs() {
     make install DESTDIR=$build_dir
 }
 
-if archive_exists $kernel_archive; then
-  echo "Archive $kernel_archive exists, skipping"
-  exit 0
+if [[ $userland_only = true ]]; then
+  zfs_config=user
+  if archive_exists $userland_archive; then
+    echo "Archive $userland_archive exists, skipping"
+    exit 0
+  fi
+else
+  zfs_config=kernel
+    if archive_exists $kernel_archive; then
+        echo "Archive $kernel_archive exists, skipping"
+        exit 0
+    fi
 fi
 
 install_packages
 build_zfs
 
-cd $build_dir
-mkdir $archive_dir
-tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
+if [[ $zfs_config != kernel ]]; then
+    echo "Creating userland archive $userland_archive"
+    install_packages
+    build_userland
+    tar -czf $archive_dir/$userland_archive \
+      --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
+      --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
+fi
+
+if [[ $zfs_config != user ]]; then
+    echo "Creating kernel archive $kernel_archive"
+    cd $build_dir
+    mkdir $archive_dir
+    tar -czf $archive_dir/$kernel_archive lib/modules || exit 1
+fi
