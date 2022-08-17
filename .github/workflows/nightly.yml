@@ -16,6 +16,10 @@ jobs:
           - 2.0.7
     steps:
       - uses: actions/checkout@v1
+      - name: Create Kernel Build File
+        run: ./scripts/setup_kernel.sh
+      - name: Output Build File
+        run: cat src/$(uname -r)/uname
       - name: Build
         run: ./build_local.sh -b ${{ secrets.s3_url }} -z ${{ matrix.zfs }} 5.15.0-1017-azure
       - name: Publish
