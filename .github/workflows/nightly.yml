@@ -119,8 +119,6 @@ jobs:
     strategy:
       matrix:
         zfs:
-          - 2.0.4
-          - 2.0.6
           - 2.0.7
         kernels: ${{ fromJson(needs.get_kernels_ubuntu-20.outputs.matrix) }}
     steps:
@@ -148,8 +146,6 @@ jobs:
     strategy:
       matrix:
         zfs:
-          - 2.0.4
-          - 2.0.6
           - 2.0.7
         kernels: ${{ fromJson(needs.get_kernels_ubuntu-22.outputs.matrix) }}
     steps:
