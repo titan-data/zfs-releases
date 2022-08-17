@@ -109,6 +109,8 @@ build_zfs
 
 if [[ $zfs_config != kernel ]]; then
     echo "Creating userland archive $userland_archive"
+    cd $build_dir
+    mkdir $archive_dir
     tar -czf $archive_dir/$userland_archive \
       --exclude lib/modules --exclude lib/udev --exclude "lib/libzpool.*" \
       --exclude sbin/zdb --exclude sbin/ztest sbin lib || exit 1
