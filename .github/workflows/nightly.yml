@@ -82,29 +82,19 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
-  build_kernel:
+  build_kernel_ubuntu-18:
     name: Build Kernel
-    needs: [get_kernels_ubuntu-18,get_kernels_ubuntu-20,get_kernels_ubuntu-22]
+    needs: get_kernels_ubuntu-18
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-18.04
-          - ubuntu-20.04
-          - ubuntu-22.04
         zfs:
           - 0.8.2
           - 2.0.4
           - 2.0.6
           - 2.0.7
-        include:
-          - os: ubuntu-18.04
-            kernels: ${{ fromJson(needs.get_kernels_ubuntu-18.outputs.matrix) }}
-          - os: ubuntu-20.04
-            kernels: ${{ fromJson(needs.get_kernels_ubuntu-20.outputs.matrix) }}
-          - os: ubuntu-22.04
-            kernels: ${{ fromJson(needs.get_kernels_ubuntu-22.outputs.matrix) }}
+        kernels: ${{ fromJson(needs.get_kernels_ubuntu-18.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
