@@ -86,7 +86,7 @@ jobs:
     name: Build Kernel
     needs: get_kernels_ubuntu-18
     if: startsWith(github.ref, 'refs/heads/')
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         zfs:
