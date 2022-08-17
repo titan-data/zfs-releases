@@ -9,13 +9,18 @@ jobs:
   build_userland:
     name: Build Userland
     if: startsWith(github.ref, 'refs/heads/')
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - ubuntu-22.04
         zfs:
           - 0.8.2
           - 2.0.4
           - 2.0.6
+          - 2.0.7
     steps:
       - uses: actions/checkout@v1
       - name: Build
@@ -26,21 +31,54 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  get_kernels:
-    runs-on: ubuntu-latest
+  get_kernels_ubuntu-18:
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.16.0'
+          go-version: '^1.18.0'
       - name: Setup GO environment
         run: |
           go mod download
       - id: set-matrix
-        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go)"
+        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go ubuntu18)"
         env:
           GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
 
+  get_kernels_ubuntu-20:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.18.0'
+      - name: Setup GO environment
+        run: |
+          go mod download
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go ubuntu20)"
+        env:
+          GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  get_kernels_ubuntu-22:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.18.0'
+      - name: Setup GO environment
+        run: |
+          go mod download
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go ubuntu22)"
+        env:
+          GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
@@ -48,14 +86,19 @@ jobs:
     name: Build Kernel
     needs: get_kernels
     if: startsWith(github.ref, 'refs/heads/')
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}.04
     strategy:
       matrix:
+        os:
+          - ubuntu-18
+          - ubuntu-20
+          - ubuntu-22
         zfs:
           - 0.8.2
           - 2.0.4
           - 2.0.6
-        kernels: ${{ fromJson(needs.get_kernels.outputs.matrix) }}
+          - 2.0.7
+        kernels: ${{ fromJson(needs.get_kernels_${{ matrix.os }}.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
       - name: Create Kernel Build File
