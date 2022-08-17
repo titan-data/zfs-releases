@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build
-        run: ./build -b ${{ secrets.s3_url }} -z ${{ matrix.zfs }} 5.13.0-1031-azure
+        run: ./build -b ${{ secrets.s3_url }} -z ${{ matrix.zfs }} 5.15.0-1017-azure)
       - name: Publish
         run: ./publish ${{ secrets.s3_bucket }}
         env:
