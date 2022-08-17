@@ -23,13 +23,14 @@ func init() {
 
 var kernels []string
 
-func main(){
-	releases, _, err := client.Repositories.ListReleases(ctx, "actions", "virtual-environments", &github.ListOptions{PerPage: 50})
+func main() {
+	linuxVariant := os.Args[1]
+	releases, _, err := client.Repositories.ListReleases(ctx, "actions", "virtual-environments", &github.ListOptions{PerPage: 100})
 	if err != nil {
 		return
 	}
 	for _, release := range releases {
-		if strings.Contains(release.GetTagName(), "ubuntu18") {
+		if strings.Contains(release.GetTagName(), linuxVariant) {
 			for _, line := range strings.Split(release.GetBody(), "\r\n") {
 				if strings.Contains(line, "Linux kernel version:") {
 					kernels = append(kernels, strings.TrimPrefix(line, "- Linux kernel version: "))
