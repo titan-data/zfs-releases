@@ -9,13 +9,9 @@ jobs:
   build_userland:
     name: Build Userland
     if: startsWith(github.ref, 'refs/heads/')
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        os:
-          - ubuntu-18.04
-          - ubuntu-20.04
-          - ubuntu-22.04
         zfs:
           - 2.0.7
     steps:
