@@ -60,10 +60,11 @@ function install_packages() {
 #  potentially install headers from URL instead of APT
   sudo apt-get install -y                                                    \
     curl xz-utils                                                            \
-    build-essential bc                                                       \
-    autoconf automake libtool kmod                                           \
-    zlib1g-dev uuid-dev libattr1-dev libblkid-dev libselinux-dev libudev-dev \
-    libacl1-dev libaio-dev libdevmapper-dev libssl-dev libelf-dev
+    build-essential autoconf automake libtool gawk alien fakeroot dkms       \
+    libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev       \
+    libattr1-dev libelf-dev python3 python3-dev                              \
+    python3-setuptools python3-cffi libffi-dev python3-packaging git         \
+    libcurl4-openssl-dev
 }
 
 # Checkout ZFS source
