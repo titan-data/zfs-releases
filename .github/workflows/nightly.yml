@@ -92,6 +92,7 @@ jobs:
           - 2.0.4
           - 2.0.6
           - 2.0.7
+          - 2.1.5
         kernels: ${{ fromJson(needs.get_kernels_ubuntu-18.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
@@ -119,6 +120,7 @@ jobs:
       matrix:
         zfs:
           - 2.0.7
+          - 2.1.5
         kernels: ${{ fromJson(needs.get_kernels_ubuntu-20.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
@@ -146,6 +148,7 @@ jobs:
       matrix:
         zfs:
           - 2.0.7
+          - 2.1.5
         kernels: ${{ fromJson(needs.get_kernels_ubuntu-22.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v1
