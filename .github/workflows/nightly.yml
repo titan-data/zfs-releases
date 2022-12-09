@@ -57,7 +57,7 @@ jobs:
         run: |
           go mod download
       - id: set-matrix
-        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go -l ubuntu20)"
+        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go -l ubuntu20,ubuntu22)"
         env:
           GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
     outputs:
