@@ -27,3 +27,9 @@ COPY publish /
 
 WORKDIR /
 RUN ./build_docker.sh -b $S3 -k -z $ZFS -d /src -r $KERNEL
+
+#Install AWS CLI
+RUN apt install -y unzip
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && ./aws/install
+
+WORKDIR /src
