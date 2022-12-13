@@ -63,23 +63,6 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
-#  get_kernels_ubuntu-22:
-#    runs-on: ubuntu-22.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-go@v2
-#        with:
-#          go-version: '^1.18.0'
-#      - name: Setup GO environment
-#        run: |
-#          go mod download
-#      - id: set-matrix
-#        run: echo "::set-output name=matrix::$(go run cmd/kernels/kernels.go -l ubuntu22)"
-#        env:
-#          GITHUB_PAT: ${{ secrets.REPO_TOKEN }}
-#    outputs:
-#      matrix: ${{ steps.set-matrix.outputs.matrix }}
-
   build_kernel_ubuntu-18:
     name: Build Kernel
     needs: get_kernels_ubuntu-18
@@ -126,39 +109,6 @@ jobs:
       - name: Output Build File
         run: cat src/$(uname -r)/uname
       - name: Build
-        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE -r ${{ matrix.kernels }}
-        env:
-          ZFS_VERSION: zfs-${{ matrix.zfs }}
+        run: make build S3={{ secrets.s3_url }} ZFS=${{ matrix.zfs }} KERNEL=${{ matrix.kernels }}
       - name: Publish
-        run: ./publish ${{ secrets.s3_bucket }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-west-2
-
-#  build_kernel_ubuntu-22:
-#    name: Build Kernel
-#    needs: get_kernels_ubuntu-22
-#    if: startsWith(github.ref, 'refs/heads/')
-#    runs-on: ubuntu-22.04
-#    strategy:
-#      matrix:
-#        zfs:
-#          - 2.1.5
-#        kernels: ${{ fromJson(needs.get_kernels_ubuntu-22.outputs.matrix) }}
-#    steps:
-#      - uses: actions/checkout@v1
-#      - name: Create Kernel Build File
-#        run: ./scripts/setup_kernel.sh
-#      - name: Output Build File
-#        run: cat src/$(uname -r)/uname
-#      - name: Build
-#        run: ./build_local.sh -b ${{ secrets.s3_url }} -k -z ${{ matrix.zfs }} -d $GITHUB_WORKSPACE -r ${{ matrix.kernels }}
-#        env:
-#          ZFS_VERSION: zfs-${{ matrix.zfs }}
-#      - name: Publish
-#        run: ./publish ${{ secrets.s3_bucket }}
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_DEFAULT_REGION: us-west-2
+        run: docker run -e "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" -e "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -e "AWS_DEFAULT_REGION=us-west-2" zfs-builder publish ${{ secrets.s3_bucket }}
