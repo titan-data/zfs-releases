@@ -28,7 +28,7 @@ func main() {
 	var linuxVariant string
 	flag.StringVar(&linuxVariant, "l", "linuxVariant", "specify linux variant")
 	flag.Parse()
-	releases, _, err := client.Repositories.ListReleases(ctx, "actions", "virtual-environments", &github.ListOptions{PerPage: 100})
+	releases, _, err := client.Repositories.ListReleases(ctx, "actions", "runner-images", &github.ListOptions{PerPage: 100})
 	if err != nil {
 		return
 	}
@@ -40,6 +40,9 @@ func main() {
 					for _, line := range strings.Split(release.GetBody(), "\r\n") {
 						if strings.Contains(line, "Linux kernel version:") {
 							kernels = append(kernels, strings.TrimPrefix(line, "- Linux kernel version: "))
+						}
+						if strings.Contains(line, "Kernel Version:") {
+							kernels = append(kernels, strings.TrimPrefix(line, "- Kernel Version: "))
 						}
 					}
 				}
