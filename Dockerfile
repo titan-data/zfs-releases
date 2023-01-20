@@ -1,4 +1,5 @@
-FROM titandata/zfs-builder-ubuntu:22.04
+ARG OS=22.04
+FROM titandata/zfs-builder-ubuntu:$OS
 
 ARG S3
 ARG ZFS
