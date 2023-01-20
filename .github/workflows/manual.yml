@@ -2,14 +2,14 @@ name: Manual Kernel Check
 
 on:
   workflow_dispatch:
-  inputs:
-    zfs:
-      description: "zfs version"
-      required: true
-      default: "2.1.5"
-    kernel:
-      description: "linux kernel"
-      required: true
+    inputs:
+      zfs:
+        description: "zfs version"
+        required: true
+        default: "2.1.5"
+      kernel:
+        description: "linux kernel"
+        required: true
 
 jobs:
   build_kernel_ubuntu-20:
