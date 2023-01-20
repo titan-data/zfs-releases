@@ -3,7 +3,6 @@ name: Nightly Kernel Check
 on:
   schedule:
     - cron: '0 5 * * *'
-  workflow_dispatch:
 
 jobs:
   build_userland:
