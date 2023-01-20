@@ -58,7 +58,7 @@ function get_zfs_source() {
     if [ ! -d $home_dir/src/zfs ]; then
         git clone https://github.com/zfsonlinux/zfs.git $home_dir/src/zfs
         cd $home_dir/src/zfs
-        [ -z $zfs_versions ] && zfs_versions=$(git describe --tags `git rev-list --tags --max-count=1`)
+        [ -z $zfs_versions ] && zfs_versions=$(git describe --tags "git rev-list --tags --max-count=1")
         git checkout zfs-$zfs_versions
     fi
 }

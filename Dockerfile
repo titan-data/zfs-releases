@@ -5,7 +5,7 @@ ARG ZFS
 ARG KERNEL
 
 # Install kernel headers
-RUN apt install -y linux-headers-$KERNEL
+RUN apt update && apt install -y linux-headers-$KERNEL
 
 # Build ZFS Module
 WORKDIR /
